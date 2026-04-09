@@ -16,14 +16,15 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: '22'      # updated to current LTS (fixes warning)
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install         # ← CHANGED FROM 'npm ci' to fix the error
 
       - name: Run volume spike detector
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true   # silences the Node 20 warning
         run: node index.js
